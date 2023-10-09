@@ -1,0 +1,5 @@
+
+
+datasets==2.9.0 
+sentencepiece==0.1.97 
+sacrebleu==2.3.1
