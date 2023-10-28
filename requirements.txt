@@ -1,5 +1,9 @@
-
-
-datasets==2.9.0 
+numpy
+pandas
+matplotlib
+torch
+tqdm==4.65.0
+fsspec==2023.9.2
+datasets==2.14.6
 sentencepiece==0.1.97 
 sacrebleu==2.3.1

@@ -1,0 +1,1 @@
+python train.py --num_heads 8 --num_layers 6 --d_model 512 --d_ff 2048 --drop_out 0.1 --batch_size 16
