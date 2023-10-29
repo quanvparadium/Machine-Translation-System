@@ -28,11 +28,11 @@ class NMTDataset(data.Dataset):
 
     def read_data(self, data_type):
         print(f"===> Load data from: {self.cfg.data_dir}/{data_type}.{self.cfg.src_lang}")
-        with open(f'{self.cfg.data_dir}/{data_type}.{self.cfg.src_lang}', 'r') as f:
+        with open(f'{self.cfg.data_dir}/{data_type}.{self.cfg.src_lang}', 'rb') as f:
             src_texts = f.readlines()
         
         print(f"===> Load data from: {self.cfg.data_dir}/{data_type}.{self.cfg.tgt_lang}")
-        with open(f"{self.cfg.data_dir}/{data_type}.{self.cfg.tgt_lang}", 'r') as f:
+        with open(f"{self.cfg.data_dir}/{data_type}.{self.cfg.tgt_lang}", 'rb') as f:
             trg_texts = f.readlines()
         
         return src_texts, trg_texts        
