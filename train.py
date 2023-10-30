@@ -10,8 +10,10 @@ from tqdm import tqdm
 from config.config import parse_option
 from model import *
 from utils.utils import get_data_loader, train_sentencepiece
-from dataset.dataset import pad_or_truncate
+from dataset.dataset import pad_or_truncate, NMTDataset
 from dataset.prepare import DataPreparing
+from datasets import load_metric
+import transformers
 class Trainer():
     def __init__(self, cfg, is_train=True, load_ckpt=False):
         self.cfg = cfg
@@ -76,7 +78,7 @@ class Trainer():
             bar = tqdm(enumerate(self.train_loader), total=len(self.train_loader), desc='TRAINING')
 
             for batch_idx, batch in bar:
-                src_input, tgt_input, tgt_output = batch
+                src_input, tgt_input, tgt_output = batch['input_ids'], batch['input_tgt_data'], batch['output_tgt_data']
                 src_input = src_input.to(self.cfg.device)
                 tgt_input = tgt_input.to(self.cfg.device)
                 tgt_output = tgt_output.to(self.cfg.device)
@@ -145,7 +147,7 @@ class Trainer():
         with torch.no_grad():
             bar = tqdm(enumerate(self.valid_loader), total=len(self.valid_loader), desc='VALIDATIION')
             for batch_idx, batch in bar:
-                src_input, tgt_input, tgt_output = batch
+                src_input, tgt_input, tgt_output = batch['input_ids'], batch['input_tgt_data'], batch['output_tgt_data']
                 src_input = src_input.to(self.cfg.device)
                 tgt_input = tgt_input.to(self.cfg.device)
                 tgt_output = tgt_output.to(self.cfg.device)
@@ -257,7 +259,33 @@ class Trainer():
         nopeak_mask = torch.tril(nopeak_mask).to(self.cfg.device)  # (1, L, L) to triangular shape
         d_mask = d_mask & nopeak_mask  # (B, L, L) padding false
 
-        return e_mask, d_mask   
+        return e_mask, d_mask  
+     
+metric = load_metric('sacrebleu')
+def postprocess_text(preds, labels):
+    preds = [pred.strip() for pred in preds]
+    labels = [[label.strip()] for label in labels]
+
+    return preds, labels
+
+def compute_metrics(eval_preds):
+    preds, labels = eval_preds
+    if isinstance(preds, tuple):
+        preds = preds[0]
+    decoded_preds = cfg.tokenizer.batch_decode(preds, skip_special_tokens=True)
+
+    decoded_labels = cfg.tokenizer.batch_decode(labels, skip_special_tokens=True)
+
+    decoded_preds, decoded_labels = postprocess_text(decoded_preds, decoded_labels)
+
+    result = metric.compute(predictions=decoded_preds, references=decoded_labels)
+    result = {"bleu": result["score"]}
+
+    prediction_lens = [np.count_nonzero(pred != cfg.tokenizer.pad_token_id) for pred in preds]
+    result["gen_len"] = np.mean(prediction_lens)
+    result = {k: round(v, 4) for k, v in result.items()}
+    
+    return result
 
 if __name__ == '__main__':
     cfg = parse_option()
@@ -269,5 +297,42 @@ if __name__ == '__main__':
     load_ckpt = False
     if cfg.ckpt_path != '':
         load_ckpt = True
-    trainer = Trainer(cfg, is_train=True, load_ckpt=load_ckpt)
-    trainer.train()
+    if cfg.model_name == 'Transformer':
+        trainer = Trainer(cfg, is_train=True, load_ckpt=load_ckpt)
+        trainer.train()
+    elif cfg.model_name == 'mBART50':
+        training_args = transformers.Seq2SeqTrainingArguments(
+            predict_with_generate=True,
+            evaluation_strategy="steps",
+            save_strategy='steps',
+            save_steps=cfg.eval_steps,
+            eval_steps=cfg.eval_steps,
+            output_dir=cfg.ckpt_path,
+            per_device_train_batch_size=cfg.batch_size,
+            per_device_eval_batch_size=cfg.batch_size,
+            learning_rate=cfg.learning_rate,
+            weight_decay=0.005,
+            num_train_epochs=cfg.epochs,
+        )        
+        cfg.tokenizer = transformers.MBart50TokenizerFast.from_pretrained('facebook/mbart-large-50-many-to-many-mmt', src_lang="vi_VN",tgt_lang = "en_XX")
+        model = transformers.MBartForConditionalGeneration.from_pretrained('facebook/mbart-large-50-many-to-many-mmt')        
+        train_dataset = NMTDataset(cfg, data_type="train")
+        valid_dataset = NMTDataset(cfg, data_type="validation")
+        test_dataset = NMTDataset(cfg, data_type="test")
+
+        # data_collator = transformers.DataCollatorForSeq2Seq(
+        #     cfg.tokenizer, 
+        #     model=model
+        # )
+        
+        trainer = transformers.Seq2SeqTrainer(
+            model,
+            training_args,
+            train_dataset=train_dataset,
+            eval_dataset=valid_dataset,
+            # data_collator=data_collator,
+            tokenizer=cfg.tokenizer,
+            compute_metrics=compute_metrics
+        )       
+        print("BEGIN TRAIN")
+        trainer.train() 
