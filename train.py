@@ -294,11 +294,8 @@ if __name__ == '__main__':
         data_pre = DataPreparing(cfg.data_dir, cfg.src_lang, cfg.tgt_lang)
         data_pre.download_dataset()
 
-    load_ckpt = False
-    if cfg.ckpt_path != '':
-        load_ckpt = True
     if cfg.model_name == 'Transformer':
-        trainer = Trainer(cfg, is_train=True, load_ckpt=load_ckpt)
+        trainer = Trainer(cfg, is_train=True, load_ckpt=cfg.load_ckpt)
         trainer.train()
     elif cfg.model_name == 'mBART50':
         training_args = transformers.Seq2SeqTrainingArguments(

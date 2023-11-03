@@ -36,6 +36,7 @@ def parse_option():
     parser.add_argument('--epochs', type=int, default=20)
     parser.add_argument('--eval_steps', type=int, default=50)
 
+    parser.add_argument('--load_ckpt', type=bool, default=False, help='path to pre-trained model')
     parser.add_argument('--ckpt_path', type=str, default='', help='path to pre-trained model')
     parser.add_argument('--ckpt_name', type=str, default='')
 

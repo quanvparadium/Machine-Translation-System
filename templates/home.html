@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title> Document </title>
+    <script src="assets/js/main.js"></script>
+</head>
+<body>
+    <div class="main">
+        <div class="header">
+            <p id="webicon"> Sentient.io </p>    
+            <p> Machine Translation Toolkit</p>
+        </div>
+
+        <div class="container">
+            <div class="choose__model">
+                <button class="active">Rule-based Machine Translation</button>
+                <button>Statistical Machine Translation</button>
+                <button>Neural Machine Translation</button>
+            </div>
+
+            <div class="input__text">
+                <textarea id="source-text" placeholder="Nhập văn bản cần dịch"></textarea>
+                <div>
+                    <span>Translate to </span>
+                    <select id="source-language">
+                        <option value="en">English</option>
+                        <option value="fr">France</option>
+                        <option value="vi">Vietnamese</option>
+                    </select>  
+                </div>
+            </div>
+
+            <div class="output__text">
+                <textarea id="target-text"></textarea>
+            </div>
+        </div>
+
+        <div class="footer">
+
+        </div>
+    </div>
+</body>
+</html>
