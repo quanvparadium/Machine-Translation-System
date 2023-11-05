@@ -87,13 +87,21 @@
 .input__text textarea {
     width: 100%;
     min-height: 100px;
+    resize: none;
+    border-radius: 15px;
+    padding: 0.5rem;
 }
 
 
+.output__text output {
+    display: block;
+    background-color: #FFFFFF;
+    color:#000;
 
-
-
-.output__text textarea {
     width: 100%;
     min-height: 100px;   
+    padding: 0.5rem;
+    border: 1px rgba(0, 0, 0, .4) solid;
+    border-radius: 15px;
+    box-sizing: border-box;
 }

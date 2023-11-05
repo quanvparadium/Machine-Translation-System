@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/style.css">
     <title> Document </title>
-    <script src="assets/js/main.js"></script>
+    <!-- <script src="assets/js/main.js"></script> -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
 </head>
 <body>
     <div class="main">
@@ -22,7 +23,7 @@
             </div>
 
             <div class="input__text">
-                <textarea id="source-text" placeholder="Nhập văn bản cần dịch"></textarea>
+                <textarea id="source_text" name="textarea" placeholder="Nhập văn bản cần dịch"></textarea>
                 <div>
                     <span>Translate to </span>
                     <select id="source-language">
@@ -34,7 +35,8 @@
             </div>
 
             <div class="output__text">
-                <textarea id="target-text"></textarea>
+                <!-- <textarea id="target-text"></textarea> -->
+                <output id="target-text"></output>
             </div>
         </div>
 
@@ -42,5 +44,6 @@
 
         </div>
     </div>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>
