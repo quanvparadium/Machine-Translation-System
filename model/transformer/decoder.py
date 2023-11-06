@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from .attention import MultiheadAttention
 from .layer_norm import LayerNormalization
-from .feed_forward import FeedFowardLayer
+from .feed_forward import FeedForwardLayer
 
 class DecoderLayer(nn.Module):
     def __init__(self, d_model, num_heads, d_ff, drop_out=0.1):
@@ -16,7 +16,7 @@ class DecoderLayer(nn.Module):
         self.drop_out_2 = nn.Dropout(drop_out)
 
         self.layer_norm_3 = LayerNormalization(d_model)
-        self.feed_forward = FeedFowardLayer(d_model, d_ff, drop_out)
+        self.feed_forward = FeedForwardLayer(d_model, d_ff, drop_out)
         self.drop_out_3 = nn.Dropout(drop_out)
 
     def forward(self, x, e_output, e_mask,  d_mask):

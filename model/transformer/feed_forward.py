@@ -1,6 +1,6 @@
 import torch 
 import torch.nn as nn
-class FeedFowardLayer(nn.Module):
+class FeedForwardLayer(nn.Module):
     def __init__(self, d_model, d_ff, drop_out=0.1):
         super().__init__()
         self.linear_1 = nn.Linear(d_model, d_ff, bias=True)

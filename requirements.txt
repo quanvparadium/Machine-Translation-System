@@ -1,9 +1,19 @@
+#Basic library
 numpy
 pandas
 matplotlib
 torch
-urbans
 tqdm==4.65.0
+
+# Rule-based Machine Translation
+urbans
+
+# # Statistical Machine Translatation
+# bs4
+# nltk
+# pickle
+
+#mBART - Neural Machine Translation
 fsspec==2023.9.2
 datasets==2.14.6
 sentencepiece==0.1.97 
@@ -11,6 +21,8 @@ sacrebleu==2.3.1
 transformers==4.26.1
 protobuf==3.20.1
 
-bs4
-nltk
-pickle
+#Deployment
+fastapi
+pydantic
+flask
+uvicorn
