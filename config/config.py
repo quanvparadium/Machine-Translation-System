@@ -30,6 +30,7 @@ def parse_option():
     parser.add_argument('--drop_out', default=0.1, type=float,
                         help="Dropout applied in the transformer")
     
+    parser.add_argument('--accelerator', type=bool, default=True)
     parser.add_argument('--device', type=str, default=None)
     parser.add_argument('--learning_rate', type=float, default=0.0001, help='learning rate')
     parser.add_argument('--batch_size', type=int, default=16, help='batch size')
@@ -39,6 +40,7 @@ def parse_option():
     parser.add_argument('--load_ckpt', type=bool, default=False, help='path to pre-trained model')
     parser.add_argument('--ckpt_path', type=str, default='', help='path to pre-trained model')
     parser.add_argument('--ckpt_name', type=str, default='')
+    parser.add_argument('--mode', type=str, choices=['train', 'evaluate', 'inference'], default='train')
 
     parser.add_argument('--is_prepare', type=bool, default=False, help='Download dataset if not exist dataset')
     opt = parser.parse_args()

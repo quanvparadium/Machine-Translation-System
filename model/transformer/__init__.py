@@ -1,5 +1,5 @@
 from .layer_norm import LayerNormalization
-from .feed_forward import FeedFowardLayer
+from .feed_forward import FeedForwardLayer
 from .position_encoding import PositionalEncoder
 
 from .attention import MultiheadAttention

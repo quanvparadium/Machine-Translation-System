@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/style.css">
-    <title> Document </title>
-    <!-- <script src="assets/js/main.js"></script> -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title> Machine Translation</title>
 </head>
 <body>
     <div class="main">
@@ -17,9 +16,9 @@
 
         <div class="container">
             <div class="choose__model">
-                <button class="active">Rule-based Machine Translation</button>
-                <button>Statistical Machine Translation</button>
-                <button>Neural Machine Translation</button>
+                <button class="model">Rule-based Machine Translation</button>
+                <button class="model">Statistical Machine Translation</button>
+                <button class="active model">Neural Machine Translation</button>
             </div>
 
             <div class="input__text">
@@ -31,6 +30,8 @@
                         <option value="fr">France</option>
                         <option value="vi">Vietnamese</option>
                     </select>  
+
+                    <button id="submitTrans">Translate</button>
                 </div>
             </div>
 
