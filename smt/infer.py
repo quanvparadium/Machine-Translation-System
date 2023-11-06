@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 from collections import defaultdict
 from nltk.translate import Alignment, AlignedSent, IBMModel1
 import pickle
-import dill
 from math import log
 
 def translate(vi_text):
