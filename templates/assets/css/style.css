@@ -13,8 +13,6 @@
     height: 100vh;
     margin: auto;
     background-color: #F0F8FF;
-
-    /* font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
     letter-spacing: 1px;
 }
 
@@ -42,7 +40,6 @@
 
 
 /* BEGIN CONTAINER */
-
 .container {
     position: relative;
     width: 70vw;
@@ -51,7 +48,6 @@
 }
 
 .container .choose__model {
-    /* background: red; */
     display: flex;
     justify-content: center;
     margin: auto;
@@ -79,13 +75,25 @@
     padding: 4px;
 }
 
-.input__text textarea {
+.input_field {
+    display: flex;
+    gap: 10px;
+}
+
+.input_field textarea {
+    flex: 1;
     width: 100%;
     min-height: 100px;
     resize: none;
     border-radius: 15px;
     padding: 0.5rem;
+    margin: 4px 0;
 }
+
+.input_field #source_grammar {
+    display: none;
+}
+
 
 
 .output__text output {

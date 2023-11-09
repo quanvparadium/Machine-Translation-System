@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <title> Machine Translation</title>
+    <style>
+
+    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <div class="main">
         <div class="header">
-            <p id="webicon"> Sentient.io </p>    
+            <p id="webicon"> Natural Language Processing </p>    
             <p> Machine Translation Toolkit</p>
         </div>
 
@@ -18,17 +20,26 @@
             <div class="choose__model">
                 <button class="model">Rule-based Machine Translation</button>
                 <button class="model">Statistical Machine Translation</button>
-                <button class="active model">Neural Machine Translation</button>
+                <button class="model active">Neural Machine Translation</button>
             </div>
 
             <div class="input__text">
-                <textarea id="source_text" name="textarea" placeholder="Nhập văn bản cần dịch"></textarea>
+                <div>
+                    <span>Source language: </span>
+                    <select id="source-language">
+                        <option value="en" disabled>English</option>
+                        <option value="vi">Vietnamese</option>
+                    </select>  
+                </div>                
+                <div class="input_field">
+                    <textarea id="source_text" name="textarea" placeholder="Nhập văn bản cần dịch"></textarea>
+                    <textarea id="source_grammar" name="textarea" placeholder="Nhập ngữ pháp"></textarea>
+                </div>
                 <div>
                     <span>Translate to </span>
-                    <select id="source-language">
+                    <select id="target_language">
                         <option value="en">English</option>
-                        <option value="fr">France</option>
-                        <option value="vi">Vietnamese</option>
+                        <option value="vi" disabled>Vietnamese</option>
                     </select>  
 
                     <button id="submitTrans">Translate</button>
@@ -36,8 +47,7 @@
             </div>
 
             <div class="output__text">
-                <!-- <textarea id="target-text"></textarea> -->
-                <output id="target-text"></output>
+                <output id="target_text"></output>
             </div>
         </div>
 
@@ -46,5 +56,17 @@
         </div>
     </div>
     <script src="assets/js/main.js"></script>
+
 </body>
 </html>
+
+<!-- 
+01. S -> NP VP
+02. NP -> PRP
+03. VP -> VB NP
+04. NP -> JJ NN
+05. PRP -> 'I'
+06. VB -> 'love' | 'hate'
+07. JJ -> 'good' | 'bad'
+08. NN -> 'dogs'
+ -->
