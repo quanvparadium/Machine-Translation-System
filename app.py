@@ -2,24 +2,12 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from starlette.responses import FileResponse 
 from fastapi.staticfiles import StaticFiles
-
+from constants import src_to_target_grammar, en_to_vi_dict
 from urbans import Translator
 
 import pickle
 from math import log
 
-src_to_target_grammar =  {
-    "NP -> JJ NN": "NP -> NN JJ" # in Vietnamese NN goes before JJ
-}
-
-en_to_vi_dict = {
-    "I":"tôi",
-    "love":"yêu",
-    "hate":"ghét",
-    "dogs":"những chú_chó",
-    "good":"ngoan",
-    "bad":"hư"
-    }
 import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 tokenizer_vi2en = AutoTokenizer.from_pretrained("vinai/vinai-translate-vi2en", src_lang="vi_VN")
@@ -70,9 +58,6 @@ def smt_translate_vi2en(vi_text):
     # for seq in result:
     #     print(' '.join(seq[0]), "-- entropy: ", seq[1])
     return ' '.join(result[0][0])
-
-# def translate_vi2en(vi_texts: str) -> str:
-#     return "STRING: " + vi_texts
 
 def process_grammar(grammar: str) -> str:
     grammarLst = grammar.strip().split('\n')
