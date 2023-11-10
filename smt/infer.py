@@ -15,7 +15,7 @@ def translate(vi_text):
             for i in range(len(sequences)):
                 seq, score = sequences[i]
                 if word not in vocab.keys():
-                    candidate = [seq + [word+'_UNK'], score]
+                    candidate = [seq + [word], score]
                     all_candidates.append(candidate)
                     continue
                 
@@ -36,6 +36,7 @@ def translate(vi_text):
     for seq in result:
         print(' '.join(seq[0]), "-- entropy: ", seq[1])
     
-s = "tôi thích bạn , bạn có thích tôi không ?"
+# s = "Giá dầu tăng lên mức cao nhất kể từ năm 2008"
+s = "Đầu hôm thứ Sáu vừa rồi , giá dầu thô giảm còn 125,45 và 108,50 đô la Mỹ trên NYMEX "
 translate(s)
 

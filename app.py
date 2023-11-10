@@ -49,7 +49,7 @@ def smt_translate_vi2en(vi_text):
             for i in range(len(sequences)):
                 seq, score = sequences[i]
                 if word not in vocab.keys():
-                    candidate = [seq + [word+'_UNK'], score]
+                    candidate = [seq + [word], score]
                     all_candidates.append(candidate)
                     continue
                 
