@@ -51,6 +51,7 @@ If you do not install Anaconda for Python, our app may still work, but package i
     matplotlib
     torch
     tqdm==4.65.0
+    wrapt
 
     # Rule-based Machine Translation
     urbans
@@ -58,7 +59,6 @@ If you do not install Anaconda for Python, our app may still work, but package i
     # Statistical Machine Translatation
     bs4
     nltk==3.8.1
-    wrapt
 
     mBART - Neural Machine Translation
     fsspec==2023.9.2
@@ -110,6 +110,13 @@ For more details about **URBANS**, you can visit the [URBANS GitHub page](https:
 
 # 3. Statistical Machine Translation
 ---
+## Dataset
+
+The [EVBCorpus](https://github.com/qhungngo/EVBCorpus) - English-Vietnamese Parallel corpus
+
+## Model
+
+IBM Model 1 with Expectation Maximization algorithm
 
 # 4. Neural Machine Translation
 ---
