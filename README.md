@@ -12,10 +12,11 @@ A Simple Machine Translation System that utilizes a pre-trained model from Huggi
 ---
 ## Requirements
 If you do not install Anaconda for Python, our app may still work, but package installation could be more difficult.
+You should use Python 3.7 <= 3.xx <= 3.10
 - **Conda**: 
 
     ```bash
-    $ conda create -n env python=3.10 anaconda
+    $ conda create -n env python=3.xx anaconda
     $ conda activate env
     ```
     To leave the environment after you no longer need it: 
@@ -47,10 +48,11 @@ If you do not install Anaconda for Python, our app may still work, but package i
 - **requirements.txt**
     ```txt
     numpy
-    pandas
     matplotlib
-    torch
-    tqdm==4.65.0
+    tqdm
+    torch==2.0.0 
+    torchvision==0.15.0 
+    torchaudio==2.0.0
     wrapt
 
     # Rule-based Machine Translation
@@ -60,7 +62,7 @@ If you do not install Anaconda for Python, our app may still work, but package i
     bs4
     nltk==3.8.1
 
-    mBART - Neural Machine Translation
+    # mBART - Neural Machine Translation
     fsspec==2023.9.2
     datasets==2.14.6
     sentencepiece==0.1.97 
@@ -68,7 +70,7 @@ If you do not install Anaconda for Python, our app may still work, but package i
     transformers==4.26.1
     protobuf==3.20.1
 
-    #Deployment
+    # Deployment
     fastapi
     pydantic
     flask
@@ -94,12 +96,12 @@ Run the following commands in terminal:
 
 Or
 ```bash
-    bash bash/transformer.sh
+    $ bash bash/transformer.sh
 ```
 
 To run our machine translation system, you can run the following commands in terminal:
 ```bash
-    python app.py
+    $ python app.py
 ```
 
 
@@ -186,10 +188,21 @@ app.mount("/", StaticFiles(directory=STATIC_FILES_DIR, html=True))
     - [Pytorch Beam Search](https://github.com/jarobyte91/pytorch_beam_search)
     - [Pytorch Documentation](https://pytorch.org/docs/stable/)
 
+- Paper:
+    - [Statistical Vs Rule Based Machine Translation: A Case Study on Indian Language Perspective](https://arxiv.org/pdf/1708.04559.pdf)
+    - [Neural Machine Translation by Jointly learning to align and translate](https://arxiv.org/pdf/1409.0473.pdf)
+    - [Multilingual Denoising Pre-training for Neural Machine Translation](https://arxiv.org/abs/2001.08210)
+    - [BARTpho: Pre-trained Sequence-to-Sequence Models for Vietnamese](https://arxiv.org/pdf/2109.09701.pdf)
+    - [BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension](https://arxiv.org/pdf/1910.13461.pdf)
+    - [Pre-Trained Models: Past, Present and Future](https://arxiv.org/pdf/2106.07139.pdf)
+
 - Tutorial:
-    - A [Github Gist](https://github.com/t4train/t4train/blob/master/readme_assets/setup-README.md) explaining how to setup README.md properly
+    - A [Github Gist](https://github.com/t4train/t4train/blob/master/readme_assets/setup-README.md) explaining how to setup [README.md](https://github.com/quanvparadium/Machine-Translation-System/blob/main/README.md) properly
     - [FastAPI in Containers - Docker](https://fastapi.tiangolo.com/deployment/docker/)
     - [Heroku: Deploying with Git](https://devcenter.heroku.com/articles/git)
 
 - Colaboratory:
     - [Statistical Machine Translation](https://github.com/sayarghoshroy/Statistical-Machine-Translation/blob/master/SMT_English_to_Hindi.ipynb): English to Hindi
+
+- Others:
+    - [NLP versus NLU versus NLG](https://www.telecats.com/blog-en/nlp-versus-nlu-versus-nlg/)
