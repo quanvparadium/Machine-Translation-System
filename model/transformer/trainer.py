@@ -40,8 +40,8 @@ class Trainer():
             self.criterion = nn.NLLLoss()
 
             print("Loading dataloaders...")
-            self.train_dataset, self.train_loader = get_data_loader(self.cfg, 'train')
-            self.valid_dataset, self.valid_loader = get_data_loader(self.cfg, 'validation')             
+            self.train_dataset, self.train_loader = get_data_loader(self.cfg, 'validation')
+            self.valid_dataset, self.valid_loader = get_data_loader(self.cfg, 'test')             
         else:
             if os.path.exists(f'{self.cfg.ckpt_path}/{self.cfg.ckpt_name}'):
                 print("Loading sentenpiece tokenizer")
@@ -143,3 +143,42 @@ class Trainer():
             print(f"Valid loss: {valid_loss} || One epoch training time: {valid_time}")
         
         print(f"Training finished!")
+        
+    def validation(self):
+        self.model.eval()
+        
+        valid_losses = []
+        start_time = datetime.datetime.now()
+
+        with torch.no_grad():
+            bar = tqdm(enumerate(self.valid_loader), total=len(self.valid_loader), desc='VALIDATIION')
+            for batch_idx, batch in bar:
+                src_input, tgt_input, tgt_output = batch
+                src_input, tgt_input, tgt_output = src_input.to(self.cfg.device), tgt_input.to(self.cfg.device), tgt_output.to(self.cfg.device)
+
+                e_mask, d_mask = self.create_mask(src_input, tgt_input)
+
+                logits = self.model(src_input, tgt_input, e_mask, d_mask)
+
+                loss = self.criterion(
+                    logits.view(-1, logits.shape[-1]),
+                    tgt_output.reshape(-1)
+                )
+
+                valid_losses.append(loss.item())
+
+                bar.set_postfix(TRAIN="Batch_Loss {:.2f} - Valid_Loss {:.2f}".format(
+                    loss.item(),
+                    np.mean(valid_losses)
+                    )
+                )
+
+                del src_input, tgt_input, tgt_output, e_mask, d_mask, logits
+                torch.cuda.empty_cache()
+
+        end_time = datetime.datetime.now()
+        validation_time = end_time - start_time
+        
+        mean_valid_loss = np.mean(valid_losses)
+        
+        return mean_valid_loss, f"{validation_time} secs"
