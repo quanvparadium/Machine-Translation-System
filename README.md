@@ -178,6 +178,18 @@ def predict(input: InputModel):
 app.mount("/", StaticFiles(directory=STATIC_FILES_DIR, html=True))
 ```
 
+# Demo
+---
+## RBMT
+
+https://github.com/quanvparadium/Machine-Translation-System/assets/80189968/3c18acd8-246f-43ca-8e44-3ec9b7055a1e
+
+## SMT
+
+https://github.com/quanvparadium/Machine-Translation-System/assets/80189968/b39d7f7c-b82e-445f-803d-d88547323279
+
+## NMT
+
 
 # References
 ---
