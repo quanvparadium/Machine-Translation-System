@@ -40,8 +40,8 @@ class Trainer():
             self.criterion = nn.NLLLoss()
 
             print("Loading dataloaders...")
-            self.train_dataset, self.train_loader = get_data_loader(self.cfg, 'validation')
-            self.valid_dataset, self.valid_loader = get_data_loader(self.cfg, 'test')             
+            self.train_dataset, self.train_loader = get_data_loader(self.cfg, 'train')
+            self.valid_dataset, self.valid_loader = get_data_loader(self.cfg, 'validation')             
         else:
             if os.path.exists(f'{self.cfg.ckpt_path}/{self.cfg.ckpt_name}'):
                 print("Loading sentenpiece tokenizer")
@@ -151,9 +151,9 @@ class Trainer():
         start_time = datetime.datetime.now()
 
         with torch.no_grad():
-            bar = tqdm(enumerate(self.valid_loader), total=len(self.valid_loader), desc='VALIDATIION')
+            bar = tqdm(enumerate(self.valid_loader), total=len(self.valid_loader), desc='VALIDATION')
             for batch_idx, batch in bar:
-                src_input, tgt_input, tgt_output = batch
+                src_input, tgt_input, tgt_output = batch['input_ids'], batch['input_tgt_data'], batch['output_tgt_data']
                 src_input, tgt_input, tgt_output = src_input.to(self.cfg.device), tgt_input.to(self.cfg.device), tgt_output.to(self.cfg.device)
 
                 e_mask, d_mask = self.create_mask(src_input, tgt_input)
