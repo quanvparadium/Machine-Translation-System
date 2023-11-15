@@ -185,16 +185,16 @@ app.mount("/", StaticFiles(directory=STATIC_FILES_DIR, html=True))
 ---
 ## RBMT
 
-https://github.com/quanvparadium/Machine-Translation-System/blob/main/utils/RBMT_demo.gif
+![Rule-based Machine Translation](https://github.com/quanvparadium/Machine-Translation-System/blob/main/utils/RBMT_demo.gif)
 
 
 ## SMT
 
-https://github.com/quanvparadium/Machine-Translation-System/blob/main/utils/SMT_demo.gif
+![Statistical Machine Translation](https://github.com/quanvparadium/Machine-Translation-System/blob/main/utils/SMT_demo.gif)
 
 
 ## NMT
-https://github.com/quanvparadium/Machine-Translation-System/blob/main/utils/NMT_demo.gif
+![Neural Machine Translation](https://github.com/quanvparadium/Machine-Translation-System/blob/main/utils/NMT_demo.gif)
 
 
 # References
