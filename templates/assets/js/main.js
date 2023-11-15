@@ -5,6 +5,18 @@ const temp = {
     "Neural Machine Translation": ''
 }
 
+function toggle_language(src_lang, tgt_lang, en_to_vi=true){
+    let selected = en_to_vi ? 0 : 1;
+
+    src_lang.querySelectorAll('option')[0].disabled = !(en_to_vi);
+    src_lang.querySelectorAll('option')[1].disabled = en_to_vi;
+    src_lang.selectedIndex = selected;
+
+    tgt_lang.querySelectorAll('option')[0].disabled = en_to_vi;
+    tgt_lang.querySelectorAll('option')[1].disabled = !(en_to_vi);
+    tgt_lang.selectedIndex = 1 - selected;
+}
+
 const inputText = document.getElementById("source_text");
 var modelBtn = document.querySelectorAll('.model');
 for (let i = 0; i < modelBtn.length; ++i){
@@ -28,14 +40,25 @@ for (let i = 0; i < modelBtn.length; ++i){
             method = 0;
             grammarArea.style.display = "inline-block";
             document.querySelector('textarea').style.minHeight = "200px";
+
+            const src_lang = document.getElementById('source_language');
+            const tgt_lang = document.getElementById('target_language');
+            toggle_language(src_lang, tgt_lang, true);
         }
         else if (modelBtn[i].innerText == "Statistical Machine Translation") {
             method = 1;
+            const src_lang = document.getElementById('source_language');
+            const tgt_lang = document.getElementById('target_language');
+            toggle_language(src_lang, tgt_lang, false);            
         }
-        else method = 2;
+        else {
+            method = 2;
+            const src_lang = document.getElementById('source_language');
+            const tgt_lang = document.getElementById('target_language');
+            toggle_language(src_lang, tgt_lang, false); 
+        }
 
         if (temp[modelBtn[i].innerText] === undefined) {
-            // console.log("NOT ALLOW");
             document.querySelector('textarea').value = ''
         }
         else document.querySelector('textarea').value = temp[modelBtn[i].innerText]
