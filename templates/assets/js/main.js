@@ -74,11 +74,10 @@ languageOption.addEventListener('change', function() {
 const grammarInput = document.getElementById('source_grammar')
 
 
-
 // TRANSLATE BUTTON
 const submitTrans = document.getElementById('submitTrans');
 submitTrans.addEventListener('click', function() {
-    console.log("OKK Click")
+    console.log("Button clicked")
     console.log(`
         SENTENCE: ${inputText.value},
         GRAMMAR: ${grammarInput.value},

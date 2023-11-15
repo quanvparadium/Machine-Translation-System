@@ -5,8 +5,9 @@ A Simple Machine Translation System that utilizes a pre-trained model from Huggi
 - [x] [User Interface](https://github.com/quanvparadium/Machine-Translation-System/blob/main/templates)
 - [x] [Ruled-based Machine Translation](https://github.com/quanvparadium/Machine-Translation-System/blob/main/refs/urban.py)
 - [x] [Statistical Machine Translation](https://github.com/quanvparadium/Machine-Translation-System/blob/main/smt)
-- [x] [Neural Machine Translation]()
+- [x] [Neural Machine Translation](https://github.com/quanvparadium/Machine-Translation-System/blob/main/model)
 - [ ] [Deploy Model with FastAPI, Docker and Heroku](https://github.com/quanvparadium/Machine-Translation-System/blob/main/app.py)
+- [x] [Report and Slide](https://github.com/quanvparadium/Machine-Translation-System/blob/main/Report_Machine_Translation_System.pdf)
 
 # 1. Usage
 ---
@@ -184,13 +185,16 @@ app.mount("/", StaticFiles(directory=STATIC_FILES_DIR, html=True))
 ---
 ## RBMT
 
-https://github.com/quanvparadium/Machine-Translation-System/assets/80189968/3c18acd8-246f-43ca-8e44-3ec9b7055a1e
+https://github.com/quanvparadium/Machine-Translation-System/blob/main/utils/RBMT_demo.gif
+
 
 ## SMT
 
-https://github.com/quanvparadium/Machine-Translation-System/assets/80189968/b39d7f7c-b82e-445f-803d-d88547323279
+https://github.com/quanvparadium/Machine-Translation-System/blob/main/utils/SMT_demo.gif
+
 
 ## NMT
+https://github.com/quanvparadium/Machine-Translation-System/blob/main/utils/NMT_demo.gif
 
 
 # References
