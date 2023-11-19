@@ -28,6 +28,12 @@ def translate_vi2en(vi_texts: str) -> str:
 
 def smt_translate_vi2en(vi_text):
     
+    def is_number(inputString):
+        return any(char.isdigit() for char in inputString)
+    
+    def is_name(inputString):
+        return any(char.isupper() for char in inputString)
+    
     def beam_search_decoder(data, k):
         sequences = [[[], 0.0]]
         # walk over each step in sequence
@@ -36,7 +42,7 @@ def smt_translate_vi2en(vi_text):
             # expand each current candidate
             for i in range(len(sequences)):
                 seq, score = sequences[i]
-                if word not in vocab.keys():
+                if word not in vocab.keys() or is_number(word) or is_name(word):
                     candidate = [seq + [word], score]
                     all_candidates.append(candidate)
                     continue
@@ -52,12 +58,14 @@ def smt_translate_vi2en(vi_text):
     
     with open('smt/rtranstable.pk', 'rb') as f: 
         vocab = pickle.load(f)
-    vi_text = vi_text.lower().split()
+    vi_text = vi_text.split()
+    vi_text[0] = vi_text[0].lower()
     result = beam_search_decoder(vi_text, 3)
     
     # for seq in result:
     #     print(' '.join(seq[0]), "-- entropy: ", seq[1])
-    return ' '.join(result[0][0])
+    sentence = list(dict.fromkeys(result[0][0]))
+    return ' '.join(sentence)
 
 def process_grammar(grammar: str) -> str:
     grammarLst = grammar.strip().split('\n')
