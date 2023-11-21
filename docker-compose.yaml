@@ -1,0 +1,16 @@
+version: "1.1"
+services:
+  dev:
+    runtime: cpu
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      args:
+        PYTHON_VERSION: 3.8.5
+        TORCH_VERSION: 1.12.1
+        TORCHVISION_VERSION: 0.13.1
+    shm_size: "16gb"
+    tty: true
+    volumes:
+      - .:/work
+      - $HOME/dataset:/work/dataset

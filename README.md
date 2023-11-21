@@ -24,6 +24,8 @@ You should use Python 3.7 <= 3.xx <= 3.10
     ```bash
     $ conda deactivate
     ```
+    How to check the packages whether available in current channels: 
+        https://conda.anaconda.org/conda-forge/osx-arm64/
 - **Mac/Linux Users**:
     ```bash
     $ python -m pip install --user --upgrade pip
@@ -38,6 +40,13 @@ You should use Python 3.7 <= 3.xx <= 3.10
     ```bash
     $ deactivate
     ```
+## Install
+
+Docker environment is recommended for installation:
+```bash
+docker-compose build dev
+docker-compose run --rm dev
+```
 
 ---
 ## Dependencies
