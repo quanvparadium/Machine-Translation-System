@@ -21,11 +21,11 @@ def postprocess_text(preds, labels):
 def preprocess_function(cfg, examples, max_input_length=128, max_target_length=128):
     inputs = [ex[cfg.src_lang] for ex in examples["translation"]]
     targets = [ex[cfg.tgt_lang] for ex in examples["translation"]]
-    model_inputs = cfg.tokenizer(inputs, max_length=max_input_length, truncation=True)
+    model_inputs = cfg.tokenizer(inputs, max_new_tokens=max_input_length, truncation=True)
     # Setup the tokenizer for targets
     # no need this line
     # with tokenizer.as_target_tokenizer():
-    labels = cfg.tokenizer(targets, max_length=max_target_length, truncation=True)
+    labels = cfg.tokenizer(targets, max_new_tokens=max_target_length, truncation=True)
     model_inputs["labels"] = labels["input_ids"]
     return model_inputs
 
@@ -33,6 +33,7 @@ class mBART50():
     def __init__(self, cfg, is_train=True, load_ckpt=False):
         print("LOADING METRIC...")
         self.cfg = cfg
+        self.model = None
         self.metric = load_metric('sacrebleu')
         self.training_args = Seq2SeqTrainingArguments(
             predict_with_generate=True,
@@ -56,13 +57,13 @@ class mBART50():
             self.model = MBartForConditionalGeneration.from_pretrained(self.cfg.ckpt_path)
         else:
             print("DEVICE: ", self.cfg.device)
-            self.model = MBartForConditionalGeneration.from_pretrained('facebook/mbart-large-50-many-to-many-mmt')
+            self.model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-one-mmt")
         
         self.data_collator = DataCollatorForSeq2Seq(
             self.cfg.tokenizer, 
             model=self.model
         )
-
+        assert self.model is not None
         train_dataset, valid_dataset, _ = self.prepare_dataset()
         
         self.trainer = Seq2SeqTrainer(
@@ -116,3 +117,14 @@ class mBART50():
     def evaluate(self):
         print("MODEL EVALUATING...")
         self.trainer.evaluate()
+
+    def evaluate(self):
+        print("MODEL EVALUATING...")
+        self.trainer.evaluate()    
+
+    def inference(self, input_text):
+        self.cfg.tokenizer.src_lang = "vi_VN"
+        encoding = self.cfg.tokenizer(input_text, return_tensors="pt")   
+        outputs = self.model.generate(**encoding)
+        predictions = self.cfg.tokenizer.batch_decode(outputs, skip_special_tokens=True)
+        print("RESULT: ", predictions)

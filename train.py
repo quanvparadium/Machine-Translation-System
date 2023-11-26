@@ -20,11 +20,16 @@ if __name__ == '__main__':
         is_train = False
     if cfg.model_name == 'Transformer':
         trainer = Trainer(cfg, is_train=is_train, load_ckpt=cfg.load_ckpt)
-        trainer.train()
-    elif cfg.model_name == "mBART50":
-
-        trainer = mBART50(cfg, is_train=is_train)
         if is_train:
             trainer.train()
         else:
+            print("INFERENCING TRANSFORMER MODEL...")
+            trainer.inference(cfg.input_text)
+    elif cfg.model_name == "mBART50":
+        trainer = mBART50(cfg, is_train=is_train)
+        if cfg.mode == "train":
+            trainer.train()
+        elif cfg.mode == "evaluate":
             trainer.evaluate()
+        else:
+            trainer.inference(cfg.input_text)

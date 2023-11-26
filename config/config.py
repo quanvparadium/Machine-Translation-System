@@ -41,7 +41,8 @@ def parse_option():
     parser.add_argument('--ckpt_path', type=str, default='', help='path to pre-trained model')
     parser.add_argument('--ckpt_name', type=str, default='')
     parser.add_argument('--mode', type=str, choices=['train', 'evaluate', 'inference'], default='train')
-
+    
+    parser.add_argument('--input_text', type=str, default= '')
     parser.add_argument('--is_prepare', type=bool, default=False, help='Download dataset if not exist dataset')
     opt = parser.parse_args()
 

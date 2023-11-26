@@ -11,7 +11,7 @@ from model.transformer import (
 )
 
 
-from utils.utils import get_data_loader, train_sentencepiece
+from utils.utils import get_data_loader, train_sentencepiece, pad_or_truncate
 
 class Trainer():
     def __init__(self, cfg, is_train=True, load_ckpt=False):
@@ -121,7 +121,7 @@ class Trainer():
                 )
             
             end_time = datetime.datetime.now()
-            training_time = end_time - start_time   
+            training_time = end_time.strftime("%S") - start_time.strftime("%S")   
 
             mean_train_loss = np.mean(train_losses)
             print(f"Train loss: {mean_train_loss} || Time: {training_time} secs")
@@ -182,3 +182,84 @@ class Trainer():
         mean_valid_loss = np.mean(valid_losses)
         
         return mean_valid_loss, f"{validation_time} secs"
+    def inference(self, input_sentence):
+        self.model.eval()
+
+        print("Preprocessing input sentence...")
+        tokenized = self.sp_src.EncodeAsIds(input_sentence)
+        src_data = torch.LongTensor(
+            pad_or_truncate([self.cfg.sos_id] + tokenized + [self.cfg.eos_id], self.cfg.seq_len, self.cfg.pad_id)
+        ).unsqueeze(0).to(self.cfg.device)
+
+        e_mask = (src_data != self.cfg.pad_id).unsqueeze(1).to(self.cfg.device) # (1, 1, L)
+
+        start_time = datetime.datetime.now()
+
+        print("Encoding input sentence...")
+        src_data = self.model.src_embedding(src_data)
+        src_data = self.model.positional_encoder(src_data)
+        e_output = self.model.encoder(src_data, e_mask) # (1, L, d_model)
+
+        result = self.greedy_search(e_output, e_mask)
+
+        end_time = datetime.datetime.now()
+
+        total_inference_time = end_time - start_time
+
+        print(f"Input: {input_sentence}")
+        import html
+        print(f"Result: {html.unescape(result)}")
+        print(f"Inference finished! || Total inference time: {total_inference_time}secs")
+        return result
+        
+    def greedy_search(self, e_output, e_mask):
+        last_words = torch.LongTensor([self.cfg.pad_id] * self.cfg.seq_len).to(self.cfg.device) # (L)
+        last_words[0] = self.cfg.sos_id # (L)
+        cur_len = 1
+
+        for i in range(self.cfg.seq_len):
+            d_mask = (last_words.unsqueeze(0) != self.cfg.pad_id).unsqueeze(1).to(self.cfg.device) # (1, 1, L)
+            nopeak_mask = torch.ones([1, self.cfg.seq_len, self.cfg.seq_len], dtype=torch.bool).to(self.cfg.device)  # (1, L, L)
+            nopeak_mask = torch.tril(nopeak_mask)  # (1, L, L) to triangular shape
+            d_mask = d_mask & nopeak_mask  # (1, L, L) padding false
+
+            tgt_embedded = self.model.tgt_embedding(last_words.unsqueeze(0))
+            tgt_positional_encoded = self.model.positional_encoder(tgt_embedded)
+            decoder_output = self.model.decoder(
+                tgt_positional_encoded,
+                e_output,
+                e_mask,
+                d_mask
+            ) # (1, L, d_model)
+
+            output = self.model.softmax(
+                self.model.output_linear(decoder_output)
+            ) # (1, L, trg_vocab_size)
+
+            output = torch.argmax(output, dim=-1) # (1, L)
+            last_word_id = output[0][i].item()
+            
+            if i < self.cfg.seq_len-1:
+                last_words[i+1] = last_word_id
+                cur_len += 1
+            
+            if last_word_id == self.cfg.eos_id:
+                break
+
+        if last_words[-1].item() == self.cfg.pad_id:
+            decoded_output = last_words[1:cur_len].tolist()
+        else:
+            decoded_output = last_words[1:].tolist()
+        decoded_output = self.sp_tgt.decode_ids(decoded_output)
+        
+        return decoded_output
+
+    def create_mask(self, src_input, tgt_input):
+        e_mask = (src_input != self.cfg.pad_id).unsqueeze(1)  # (B, 1, L)
+        d_mask = (tgt_input != self.cfg.pad_id).unsqueeze(1)  # (B, 1, L)
+
+        nopeak_mask = torch.ones([1, self.cfg.seq_len, self.cfg.seq_len], dtype=torch.bool)  # (1, L, L)
+        nopeak_mask = torch.tril(nopeak_mask).to(self.cfg.device)  # (1, L, L) to triangular shape
+        d_mask = d_mask & nopeak_mask  # (B, L, L) padding false
+
+        return e_mask, d_mask    
